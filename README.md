@@ -26,6 +26,20 @@ OpenCode 安装脚本的国内加速镜像版本。
 
 ### 使用方法
 
+**一键安装（推荐）：**
+
+```bash
+curl -fsSL https://g.blfrp.cn/raw.githubusercontent.com/Nikolay-Jiang/cn-install/main/opencode-install-mirror.sh | bash
+```
+
+安装指定版本：
+
+```bash
+curl -fsSL https://g.blfrp.cn/raw.githubusercontent.com/Nikolay-Jiang/cn-install/main/opencode-install-mirror.sh | bash -s -- --version 1.0.180
+```
+
+**本地运行：**
+
 ```bash
 # 安装最新版
 bash opencode-install-mirror.sh
