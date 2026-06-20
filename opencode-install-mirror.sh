@@ -182,12 +182,14 @@ else
 
     if [ -z "$requested_version" ]; then
         url="https://g.blfrp.cn/github.com/anomalyco/opencode/releases/latest/download/$filename"
+        echo -e "${MUTED}Fetching latest version...${NC}"
         specific_version=$(curl -s https://g.blfrp.cn/github.com/anomalyco/opencode/releases/latest | grep -oP '/releases/tag/v\K[0-9]+\.[0-9]+\.[0-9]+' | head -1)
 
         if [[ $? -ne 0 || -z "$specific_version" ]]; then
             echo -e "${RED}Failed to fetch version information${NC}"
             exit 1
         fi
+        echo -e "${MUTED}Latest version: ${NC}${specific_version}"
     else
         # Strip leading 'v' if present
         requested_version="${requested_version#v}"
@@ -329,8 +331,13 @@ download_and_install() {
     local tmp_dir="${TMPDIR:-/tmp}/opencode_install_$$"
     mkdir -p "$tmp_dir"
 
-    if [[ "$os" == "windows" ]] || ! [ -t 2 ] || ! download_with_progress "$url" "$tmp_dir/$filename"; then
-        # Fallback to standard curl on Windows, non-TTY environments, or if custom progress fails
+    if [[ "$os" == "windows" ]]; then
+        curl -# -L -o "$tmp_dir/$filename" "$url"
+    elif [ -t 2 ]; then
+        if ! download_with_progress "$url" "$tmp_dir/$filename"; then
+            curl -# -L -o "$tmp_dir/$filename" "$url"
+        fi
+    else
         curl -# -L -o "$tmp_dir/$filename" "$url"
     fi
 
