@@ -182,7 +182,7 @@ else
 
     if [ -z "$requested_version" ]; then
         url="https://g.blfrp.cn/github.com/anomalyco/opencode/releases/latest/download/$filename"
-        specific_version=$(curl -s https://g.blfrp.cn/api.github.com/repos/anomalyco/opencode/releases/latest | sed -n 's/.*"tag_name": *"v\([^"]*\)".*/\1/p')
+        specific_version=$(curl -s https://g.blfrp.cn/github.com/anomalyco/opencode/releases/latest | grep -oP '/releases/tag/v\K[0-9]+\.[0-9]+\.[0-9]+' | head -1)
 
         if [[ $? -ne 0 || -z "$specific_version" ]]; then
             echo -e "${RED}Failed to fetch version information${NC}"
